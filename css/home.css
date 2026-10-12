@@ -1,0 +1,651 @@
+/* ==========================================================================
+   KMH Engineering - Home page (layout from WEBSITE.pptx)
+   Fixed logo top-left, vertical menu + contact icons on the right,
+   full-height sections: Intro, About, Services, Projects, Deliveries, Clients.
+   ========================================================================== */
+
+:root {
+    --kmh-blue: #26ace3;
+    --kmh-blue-dark: #1b8fc0;
+    --kmh-text: #111;
+    --kmh-muted: #444;
+    --kmh-rail: 190px;      /* width reserved for the right-hand menu */
+    --kmh-gutter: 13vw;     /* left indent of section content */
+    /* Fonts of the original site (skin.css) */
+    --kmh-font: 'Open Sans', sans-serif;               /* menu, headings, body */
+    --kmh-font-sub: 'Droid Serif', Georgia, serif;     /* subheadings (italic) */
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; overflow-x: hidden; }
+
+body.kmh-home {
+    margin: 0;
+    overflow-x: hidden;
+    background: #fff;
+    color: var(--kmh-text);
+    font-family: var(--kmh-font);
+    font-size: 17px;
+    line-height: 1.6;
+}
+
+.kmh-home a { color: inherit; text-decoration: none; }
+.kmh-home img { max-width: 100%; }
+
+.sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+/* ---------- Fixed logo ---------- */
+.kmh-logo {
+    position: fixed; top: 14px; left: 10px; z-index: 46;
+    display: block; width: 170px; padding: 4px 6px; background: #fff;
+    transition: opacity .4s ease;
+}
+.kmh-logo img { display: block; width: 100%; height: auto; }
+
+/* ---------- Right-hand menu rail ---------- */
+.kmh-rail {
+    position: fixed; top: 0; right: 0; bottom: 0; z-index: 40;
+    width: var(--kmh-rail);
+    display: flex; flex-direction: column; justify-content: center; align-items: flex-end;
+    padding: 90px 32px 30px 0;
+    background: #fff;
+    transition: opacity .4s ease;
+}
+.kmh-menu { list-style: none; margin: 0; padding: 0; text-align: right; }
+.kmh-menu li + li { margin-top: 22px; }
+.kmh-menu a {
+    font-family: var(--kmh-font); font-size: 19px; font-weight: 700;
+    letter-spacing: .5px; text-transform: uppercase; color: var(--kmh-text);
+    transition: color .2s ease;
+}
+.kmh-menu a:hover,
+.kmh-menu a:focus-visible,
+.kmh-menu a.is-active { color: var(--kmh-blue); }
+
+.kmh-contact-icons { list-style: none; margin: 46px 0 0; padding: 0; text-align: right; }
+.kmh-contact-icons li + li { margin-top: 10px; }
+.kmh-contact-icons a { display: inline-flex; justify-content: center; width: 34px; transition: transform .2s ease; }
+.kmh-contact-icons a:hover { transform: scale(1.1); }
+.kmh-contact-icons img { height: 26px; width: auto; }
+
+.kmh-menu-toggle { display: none; }
+
+/* While the intro animation fills the screen, keep the chrome out of the way */
+body.at-intro .kmh-logo,
+body.at-intro .kmh-rail { opacity: 0; pointer-events: none; }
+
+/* ---------- Sections ---------- */
+.kmh-main { padding-right: var(--kmh-rail); }
+
+.kmh-section {
+    min-height: 100vh;
+    padding: 110px 40px 70px var(--kmh-gutter);
+    display: flex; flex-direction: column; justify-content: center;
+}
+
+.kmh-title {
+    margin: 0 0 22px; color: var(--kmh-blue);
+    font-family: var(--kmh-font); font-size: 30px; font-weight: 700;
+    letter-spacing: .2px; line-height: 1.2;
+}
+/* Subheadings use the original site's italic serif */
+.kmh-lead {
+    margin: 0 0 30px; font-family: var(--kmh-font-sub); font-style: italic;
+    font-size: 19px; color: #424242;
+}
+.kmh-lead strong { font-weight: 700; color: var(--kmh-text); }
+
+.kmh-link { color: var(--kmh-blue) !important; font-size: 18px; }
+.kmh-link:hover { text-decoration: underline; }
+
+.kmh-know-more { display: block; margin-top: 18px; text-align: right; font-size: 17px; }
+.kmh-know-more:hover { color: var(--kmh-blue); }
+
+/* ---------- Intro (HOME) ---------- */
+.kmh-intro {
+    position: relative; height: 100vh; min-height: 100vh;
+    margin-right: calc(-1 * var(--kmh-rail));   /* bleed under the (hidden) rail */
+    padding: 0; overflow: hidden; background: #fff;
+}
+.kmh-intro video {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+}
+/* Scroll-down cue: mouse outline with a gliding wheel, cascading chevrons and a fine label */
+.kmh-scroll-cue {
+    position: absolute; left: 50%; bottom: 30px; z-index: 2;
+    display: flex; flex-direction: column; align-items: center;
+    color: #fff !important;
+    opacity: 0; transform: translate(-50%, 10px);
+    animation: kmh-cue-in .35s ease-out .5s forwards;   /* shows shortly after load, during the intro */
+}
+@keyframes kmh-cue-in { to { opacity: 1; transform: translate(-50%, 0); } }
+.kmh-scroll-mouse {
+    position: relative; display: block;
+    width: 28px; height: 46px; border-radius: 15px;
+    border: 2px solid rgba(255, 255, 255, .9);
+    background: rgba(255, 255, 255, .08);
+    box-shadow: 0 6px 18px rgba(0, 40, 80, .16);
+    transition: background .3s ease, border-color .3s ease, transform .3s ease;
+}
+.kmh-scroll-wheel {
+    position: absolute; top: 8px; left: 50%;
+    width: 4px; height: 8px; margin-left: -2px; border-radius: 2px;
+    background: #fff;
+    animation: kmh-wheel 1.8s cubic-bezier(.65, 0, .35, 1) infinite;
+    transition: background .3s ease;
+}
+.kmh-scroll-arrows { display: flex; flex-direction: column; align-items: center; margin-top: 10px; }
+.kmh-scroll-arrows i {
+    display: block; width: 10px; height: 10px; margin-top: 2px;
+    border-right: 2px solid #fff; border-bottom: 2px solid #fff;
+    transform: rotate(45deg);
+    animation: kmh-arrow 1.8s ease-in-out infinite;
+}
+.kmh-scroll-arrows i:nth-child(2) { animation-delay: .2s; }
+.kmh-scroll-label {
+    margin-top: 12px; padding-left: 4px;           /* padding balances the letter-spacing */
+    font-family: var(--kmh-font); font-size: 11px; font-weight: 600;
+    letter-spacing: 4px; text-transform: uppercase; opacity: .85;
+}
+.kmh-scroll-cue:hover .kmh-scroll-mouse,
+.kmh-scroll-cue:focus-visible .kmh-scroll-mouse { background: #fff; border-color: #fff; transform: translateY(-2px); }
+.kmh-scroll-cue:hover .kmh-scroll-wheel,
+.kmh-scroll-cue:focus-visible .kmh-scroll-wheel { background: var(--kmh-blue); }
+.kmh-scroll-cue:focus-visible { outline: none; }
+.kmh-scroll-cue:focus-visible .kmh-scroll-mouse { box-shadow: 0 0 0 3px rgba(255, 255, 255, .45); }
+@keyframes kmh-wheel {
+    0% { opacity: 0; transform: translateY(0); }
+    20% { opacity: 1; }
+    70% { opacity: 1; transform: translateY(15px); }
+    100% { opacity: 0; transform: translateY(17px); }
+}
+@keyframes kmh-arrow {
+    0%, 100% { opacity: .15; }
+    45% { opacity: 1; }
+}
+
+/* ---------- About ---------- */
+.kmh-about p { max-width: 1150px; margin: 0 0 24px; }
+.kmh-about-row {
+    display: grid; grid-template-columns: minmax(240px, 1fr) 1.9fr; gap: 40px; align-items: start;
+    max-width: 1150px; margin-top: 6px;
+}
+.kmh-about-row p { margin-bottom: 30px; }
+.kmh-about-media {
+    position: relative; width: 100%; aspect-ratio: 16 / 9; background: #eee;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, .28);
+}
+.kmh-about-media video { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+/* ---------- Shared slider chevrons ---------- */
+.kmh-slider { position: relative; padding: 0 64px; max-width: 1280px; }
+.kmh-chevron {
+    position: absolute; top: 50%; z-index: 3;
+    width: 44px; height: 76px; margin-top: -38px; padding: 0;
+    border: 0; background: transparent; cursor: pointer; color: #2f4f8f;
+}
+.kmh-chevron svg { width: 100%; height: 100%; display: block; }
+.kmh-chevron:hover, .kmh-chevron:focus-visible { color: var(--kmh-blue); }
+.kmh-chevron.prev { left: 6px; }
+.kmh-chevron.next { right: 6px; }
+
+/* ---------- Services slideshow ---------- */
+.kmh-services .kmh-lead { margin-bottom: 18px; }
+.kmh-services .kmh-slider { margin-left: -64px; }
+.kmh-services-stage {
+    position: relative; aspect-ratio: 16 / 9; background: #22a2e0; overflow: hidden;
+    container-type: inline-size;          /* text below scales with the slide width (cqw) */
+}
+.kmh-services-stage video { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+/* Blue arrow panel - same colour/shape as the one in the video, slightly larger so it
+   covers it (video panel: 19% wide at top/bottom, point at 35.2%) */
+.kmh-svc-panel {
+    position: absolute; top: -1px; bottom: -1px; left: -1px; width: 37.6%;
+    background: #22a2e0;
+    clip-path: polygon(0 0, 54.5% 0, 100% 50%, 54.5% 100%, 0 100%);
+}
+.kmh-svc-text {
+    position: absolute; top: 50%; left: 2.8cqw; width: 23.5cqw;
+    transform: translateY(-50%);
+    /* outgoing text fades out quickly, incoming text fades in after it - no overlap */
+    opacity: 0; visibility: hidden; transition: opacity .18s ease, visibility 0s linear .18s;
+}
+.kmh-svc-text.is-active { opacity: 1; visibility: visible; transition: opacity .35s ease .18s, visibility 0s linear .18s; }
+.kmh-svc-text h3 {
+    margin: 0 0 1.5cqw; color: #0b1620;
+    font-family: var(--kmh-font); font-weight: 700; letter-spacing: .2px;
+    font-size: 22px; font-size: clamp(15px, 2.1cqw, 30px); line-height: 1.25;
+}
+.kmh-svc-text p {
+    margin: 0 0 1.9cqw; color: #fff;
+    font-size: 15px; font-size: clamp(12px, 1.45cqw, 20px); line-height: 1.5;
+}
+.kmh-svc-text a {
+    color: #fff !important; font-size: 15px; font-size: clamp(12px, 1.45cqw, 20px);
+}
+.kmh-svc-text a:hover, .kmh-svc-text a:focus-visible { text-decoration: underline; }
+
+/* Narrow slides (phones): wider panel, title + link only */
+@container (max-width: 560px) {
+    .kmh-svc-panel { width: 60%; clip-path: polygon(0 0, 70% 0, 100% 50%, 70% 100%, 0 100%); }
+    .kmh-svc-text { left: 4cqw; width: 42cqw; }
+    .kmh-svc-text h3 { font-size: 14px; margin-bottom: 6px; }
+    .kmh-svc-text p { display: none; }
+    .kmh-svc-text a { font-size: 12px; }
+}
+
+.kmh-slide-dots { display: flex; gap: 8px; justify-content: center; margin-top: 14px; }
+.kmh-slide-dots button {
+    width: 10px; height: 10px; padding: 0; border-radius: 50%; border: 0;
+    background: #c9d6e2; cursor: pointer;
+}
+.kmh-slide-dots button.is-active { background: var(--kmh-blue); }
+
+/* ---------- Projects ---------- */
+.kmh-projects .kmh-slider { margin-left: -64px; }
+.kmh-project-viewport { overflow: hidden; }
+.kmh-project-track { display: flex; transition: transform .6s ease; }
+.kmh-project-page {
+    flex: 0 0 100%;
+    display: grid; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 26px 28px;
+    height: min(56vh, 560px);
+}
+/* tall | two stacked | tall - as in the mockup */
+.kmh-project-page > :nth-child(1) { grid-column: 1; grid-row: 1 / span 2; }
+.kmh-project-page > :nth-child(2) { grid-column: 2; grid-row: 1; }
+.kmh-project-page > :nth-child(3) { grid-column: 2; grid-row: 2; }
+.kmh-project-page > :nth-child(4) { grid-column: 3; grid-row: 1 / span 2; }
+.kmh-project {
+    position: relative; display: block; overflow: hidden; background: #ddd;
+}
+.kmh-project img {
+    display: block; width: 100%; height: 100%; object-fit: cover;
+    transition: transform .6s ease;
+}
+.kmh-project-name {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    padding: 40px 16px 14px;
+    background: linear-gradient(to top, rgba(0, 0, 0, .78), rgba(0, 0, 0, 0));
+    color: #fff; font-size: 18px; font-weight: 700; line-height: 1.3;
+    opacity: 0; transform: translateY(12px);
+    transition: opacity .3s ease, transform .3s ease;
+}
+.kmh-project-name { font-family: var(--kmh-font); letter-spacing: .2px; }
+.kmh-project-name small {
+    display: block; font-family: var(--kmh-font-sub); font-style: italic;
+    font-size: 14px; font-weight: 400; letter-spacing: 0; opacity: .9;
+}
+.kmh-project:hover img, .kmh-project:focus-visible img { transform: scale(1.05); }
+.kmh-project:hover .kmh-project-name,
+.kmh-project:focus-visible .kmh-project-name { opacity: 1; transform: none; }
+/* Touch screens have no hover - always show the names */
+@media (hover: none) {
+    .kmh-project-name { opacity: 1; transform: none; }
+}
+.kmh-projects .kmh-know-more { max-width: 1280px; padding-right: 64px; margin-left: -64px; }
+
+/* ---------- Deliveries timeline ---------- */
+.kmh-timeline { max-width: 1150px; margin-top: 40px; }
+.kmh-timeline-years {
+    display: grid; grid-template-columns: repeat(6, 1fr); gap: 24px;
+}
+.kmh-timeline-year { text-align: center; font-size: 26px; font-weight: 700; min-height: 40px; }
+.kmh-timeline-axis {
+    position: relative; display: grid; grid-template-columns: repeat(6, 1fr); gap: 24px;
+}
+.kmh-timeline-axis::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 7px; background: var(--kmh-blue);
+}
+.kmh-timeline-tick { height: 46px; position: relative; }
+.kmh-timeline-tick::before {
+    content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; margin-left: -1px; background: var(--kmh-blue);
+}
+.kmh-timeline-items { display: grid; grid-template-columns: repeat(6, 1fr); gap: 24px; margin-top: 12px; }
+.kmh-timeline-item { position: relative; padding-top: 20px; }
+.kmh-timeline-item::before {          /* triangle pointer */
+    content: ""; position: absolute; top: 0; left: 50%; margin-left: -12px;
+    border-left: 12px solid transparent; border-right: 12px solid transparent;
+    border-bottom: 16px solid var(--kmh-blue);
+}
+.kmh-timeline-box {
+    display: flex; align-items: center; justify-content: center; text-align: center;
+    aspect-ratio: 1 / 1; padding: 10px;
+    background: var(--kmh-blue); color: #fff; font-size: 16px; line-height: 1.4;
+}
+.kmh-deliveries .kmh-know-more { max-width: 1150px; }
+
+/* Deliveries + Clients size to their content (no full-screen gap between them) */
+.kmh-deliveries { min-height: 0; padding-bottom: 30px; }
+
+/* ---------- Clients ---------- */
+.kmh-clients {
+    min-height: 0; padding: 50px 40px 90px;
+    align-items: center; text-align: center;
+}
+.kmh-clients .kmh-title { margin-bottom: 18px; }
+.kmh-clients-intro { max-width: 860px; margin: 0 auto 50px; color: var(--kmh-muted); }
+.kmh-client-logos {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+    gap: 40px 70px; max-width: 1150px; margin: 0 auto;
+}
+.kmh-client-logos img { display: block; height: auto; }
+.kmh-client-logos .logo-meenakshi { width: 320px; }
+.kmh-client-logos .logo-vamsiram { width: 190px; }
+.kmh-client-logos .logo-emerald { width: 130px; }
+
+/* ---------- Footer ---------- */
+.kmh-footer {
+    padding: 26px 40px; background: #1d1d1d; color: #bbb;
+    font-size: 14px; text-align: center; position: relative; z-index: 50;
+}
+.kmh-footer a { color: #fff; }
+.kmh-footer a:hover { color: var(--kmh-blue); }
+
+/* ==========================================================================
+   Polish layer - depth, rhythm and motion on top of the base layout
+   ========================================================================== */
+:root {
+    --kmh-tint: #f4f8fb;                      /* alternate section background */
+    --kmh-line: #e3ebf2;
+    --kmh-shadow-sm: 0 4px 14px rgba(16, 52, 84, .08);
+    --kmh-shadow-lg: 0 24px 48px -18px rgba(16, 52, 84, .38);
+    --kmh-radius: 10px;
+    --kmh-ease: cubic-bezier(.22, .61, .36, 1);
+}
+body.kmh-home { color: #1c232b; }
+::selection { background: var(--kmh-blue); color: #fff; }
+
+/* Sections run full width (their background reaches under the menu rail) */
+.kmh-main { padding-right: 0; }
+.kmh-section { padding-right: calc(var(--kmh-rail) + 40px); }
+.kmh-intro { margin-right: 0; }
+.kmh-rail { background: transparent; }
+.kmh-services, .kmh-deliveries { background: var(--kmh-tint); }
+.kmh-deliveries { padding-bottom: 70px; }
+.kmh-about p, .kmh-clients-intro { color: #48525c; }
+
+/* Logo on a frosted plate so it reads over any section */
+.kmh-logo {
+    padding: 8px 12px; border-radius: 8px;
+    background: rgba(255, 255, 255, .86);
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+    box-shadow: var(--kmh-shadow-sm);
+}
+
+/* Headings */
+.kmh-title { font-size: 32px; margin-bottom: 18px; }
+
+/* Menu: thin underline grows in on hover / active */
+.kmh-menu a {
+    position: relative; display: inline-block; padding-bottom: 4px;
+    background: linear-gradient(var(--kmh-blue), var(--kmh-blue)) no-repeat right bottom / 0 2px;
+    transition: color .25s ease, background-size .35s var(--kmh-ease);
+}
+.kmh-menu a:hover, .kmh-menu a:focus-visible, .kmh-menu a.is-active { background-size: 100% 2px; }
+.kmh-contact-icons a { opacity: .9; transition: transform .25s var(--kmh-ease), opacity .25s ease; }
+.kmh-contact-icons a:hover { opacity: 1; transform: translateY(-2px) scale(1.06); }
+
+/* Links with a nudging arrow feel */
+.kmh-link, .kmh-know-more, .kmh-svc-text a { transition: color .2s ease, letter-spacing .25s var(--kmh-ease); }
+.kmh-link:hover, .kmh-know-more:hover, .kmh-svc-text a:hover { letter-spacing: .6px; text-decoration: none; }
+.kmh-know-more { font-weight: 600; color: #2a3540; }
+
+/* Media frames */
+.kmh-about-media, .kmh-services-stage {
+    border-radius: var(--kmh-radius); overflow: hidden; box-shadow: var(--kmh-shadow-lg);
+}
+
+/* Slider arrows: round white buttons */
+.kmh-chevron {
+    width: 48px; height: 48px; margin-top: -24px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: #fff; border: 1px solid var(--kmh-line); color: #1f3d5c;
+    box-shadow: var(--kmh-shadow-sm);
+    transition: background .25s ease, color .25s ease, border-color .25s ease, transform .25s var(--kmh-ease);
+}
+.kmh-chevron svg { width: 12px; height: 21px; }
+.kmh-chevron:hover, .kmh-chevron:focus-visible {
+    background: var(--kmh-blue); border-color: var(--kmh-blue); color: #fff; transform: scale(1.06);
+}
+.kmh-chevron:focus-visible { outline: 3px solid rgba(38, 172, 227, .35); outline-offset: 2px; }
+
+/* Slide dots: active one becomes a pill */
+.kmh-slide-dots { margin-top: 18px; }
+.kmh-slide-dots button { width: 8px; height: 8px; border-radius: 4px; transition: width .3s var(--kmh-ease), background .3s ease; }
+.kmh-slide-dots button.is-active { width: 26px; }
+
+/* Project tiles */
+.kmh-project {
+    border-radius: var(--kmh-radius); box-shadow: var(--kmh-shadow-sm);
+    transition: transform .4s var(--kmh-ease), box-shadow .4s var(--kmh-ease);
+}
+.kmh-project:hover, .kmh-project:focus-visible { transform: translateY(-4px); box-shadow: var(--kmh-shadow-lg); }
+.kmh-project:focus-visible { outline: 3px solid rgba(38, 172, 227, .5); outline-offset: 3px; }
+.kmh-project-name {
+    padding: 56px 18px 16px;
+    background: linear-gradient(to top, rgba(8, 22, 36, .85), rgba(8, 22, 36, 0));
+}
+
+/* Timeline: slim gradient line on a faint track, ring markers, thin connectors, white cards */
+.kmh-timeline-year { font-size: 28px; font-weight: 800; letter-spacing: .5px; color: #16202a; }
+.kmh-timeline-tick { height: 30px; position: relative; z-index: 1; }
+.kmh-timeline-axis {
+    background: linear-gradient(var(--kmh-line), var(--kmh-line)) no-repeat left calc(100% - 1px) / 100% 2px;
+}
+.kmh-timeline-axis::after {                      /* the line */
+    height: 4px; border-radius: 2px; z-index: 0;
+    background: linear-gradient(90deg, #9fdbf4 0%, var(--kmh-blue) 45%, #1d8fc5 100%);
+}
+.kmh-timeline-tick::before {                     /* ring marker sitting on the line */
+    top: auto; bottom: -6px; width: 16px; height: 16px; margin-left: -8px; border-radius: 50%;
+    background: #fff; border: 3px solid var(--kmh-blue);
+    box-shadow: 0 0 0 5px rgba(38, 172, 227, .14);
+}
+.kmh-timeline-item::before {                     /* thin connector from marker to card */
+    top: -6px; width: 2px; height: 26px; margin-left: -1px; border: 0;
+    background: linear-gradient(var(--kmh-blue), rgba(38, 172, 227, .12));
+}
+.kmh-timeline-items { counter-reset: tl; }
+.kmh-timeline-box {
+    position: relative; padding: 30px 12px 16px;
+    background: #fff; color: #1c232b; font-size: 15px; font-weight: 600; line-height: 1.45;
+    border: 1px solid var(--kmh-line); border-radius: 14px;
+    box-shadow: 0 12px 28px -18px rgba(16, 52, 84, .35);
+    transition: transform .35s var(--kmh-ease), box-shadow .35s var(--kmh-ease), border-color .35s ease;
+}
+.kmh-timeline-box::after {                       /* step number 01-06 */
+    counter-increment: tl; content: counter(tl, decimal-leading-zero);
+    position: absolute; top: 12px; left: 14px;
+    font-size: 12px; font-weight: 700; letter-spacing: 1.5px; color: var(--kmh-blue);
+}
+.kmh-timeline-box[data-year]::before { color: var(--kmh-blue); }
+.kmh-timeline-box { flex-direction: column; gap: 4px; }
+/* keep every card in a row the same height, even when one has more text */
+.kmh-timeline-item { display: flex; flex-direction: column; }
+.kmh-timeline-item .kmh-timeline-box { flex: 1 1 auto; }
+.kmh-timeline-box .tl-label {
+    font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: #6b7783;
+}
+.kmh-timeline-box .tl-value {
+    font-size: 18px; font-size: clamp(15px, 1.2vw, 20px); font-weight: 800; color: var(--kmh-blue);
+    line-height: 1.2;
+}
+.kmh-timeline-item:hover .kmh-timeline-box {
+    transform: translateY(-4px); border-color: rgba(38, 172, 227, .45); box-shadow: var(--kmh-shadow-lg);
+}
+
+/* Timeline build-up, 2018 -> 2026 (classes set by home.js when it scrolls into view).
+   The line draws at a constant speed; each tick / year / box appears as the line reaches it:
+   item i sits at (i + .5) / 6 of the width -> delay = .15s + i * .3s for a 1.8s draw. */
+.kmh-timeline :is(.kmh-timeline-year, .kmh-timeline-tick, .kmh-timeline-item):nth-child(1) { --d: .15s; }
+.kmh-timeline :is(.kmh-timeline-year, .kmh-timeline-tick, .kmh-timeline-item):nth-child(2) { --d: .45s; }
+.kmh-timeline :is(.kmh-timeline-year, .kmh-timeline-tick, .kmh-timeline-item):nth-child(3) { --d: .75s; }
+.kmh-timeline :is(.kmh-timeline-year, .kmh-timeline-tick, .kmh-timeline-item):nth-child(4) { --d: 1.05s; }
+.kmh-timeline :is(.kmh-timeline-year, .kmh-timeline-tick, .kmh-timeline-item):nth-child(5) { --d: 1.35s; }
+.kmh-timeline :is(.kmh-timeline-year, .kmh-timeline-tick, .kmh-timeline-item):nth-child(6) { --d: 1.65s; }
+
+.kmh-timeline.tl-armed .kmh-timeline-axis::after { transform: scaleX(0); transform-origin: left center; }
+.kmh-timeline.tl-armed .kmh-timeline-tick::before { transform: scale(0); }
+.kmh-timeline.tl-armed .kmh-timeline-item::before { transform: scaleY(0); transform-origin: center top; }
+.kmh-timeline.tl-armed .kmh-timeline-year { opacity: 0; transform: translateY(8px); }
+.kmh-timeline.tl-armed .kmh-timeline-item { opacity: 0; transform: translateY(22px) scale(.96); }
+
+.kmh-timeline.tl-play .kmh-timeline-axis::after { transform: scaleX(1); transition: transform 1.8s linear; }
+.kmh-timeline.tl-play .kmh-timeline-tick::before {          /* markers pop with a little overshoot */
+    transform: scale(1); transition: transform .45s cubic-bezier(.34, 1.56, .64, 1) var(--d);
+}
+.kmh-timeline.tl-play .kmh-timeline-item::before { transform: scaleY(1); transition: transform .35s var(--kmh-ease) calc(var(--d) + .1s); }
+.kmh-timeline.tl-play .kmh-timeline-year,
+.kmh-timeline.tl-play .kmh-timeline-item {
+    opacity: 1; transform: none;
+    transition: opacity .5s ease var(--d), transform .6s var(--kmh-ease) var(--d);
+}
+
+/* glowing head that leads the line while it draws */
+.kmh-timeline-axis::before {
+    content: ""; position: absolute; z-index: 2; left: 0; bottom: -5px;
+    width: 14px; height: 14px; border-radius: 50%; background: var(--kmh-blue);
+    box-shadow: 0 0 0 5px rgba(38, 172, 227, .22), 0 0 18px 4px rgba(38, 172, 227, .55);
+    opacity: 0; pointer-events: none;
+}
+.kmh-timeline.tl-play .kmh-timeline-axis::before { animation: kmh-tl-head 1.8s linear forwards; }
+@keyframes kmh-tl-head {
+    0% { left: 0; opacity: 0; }
+    8% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { left: calc(100% - 14px); opacity: 0; }
+}
+
+/* Client logos on soft cards */
+.kmh-client-logos { gap: 28px; }
+/* equal-size cards; each logo is fitted inside */
+.kmh-client-logos img {
+    box-sizing: border-box; width: 260px; height: 130px; padding: 24px 30px; object-fit: contain;
+    background: #fff; border: 1px solid var(--kmh-line); border-radius: 14px;
+    box-shadow: var(--kmh-shadow-sm);
+    transition: transform .35s var(--kmh-ease), box-shadow .35s var(--kmh-ease);
+}
+.kmh-client-logos img:hover { transform: translateY(-4px); box-shadow: var(--kmh-shadow-lg); }
+.kmh-client-logos .logo-meenakshi { width: 260px; padding: 30px 22px; }
+.kmh-client-logos .logo-vamsiram { width: 260px; }
+.kmh-client-logos .logo-emerald { width: 260px; padding: 14px; }
+
+/* Footer */
+.kmh-footer { background: #0f1c28; color: #9fb0c0; padding: 30px 40px; letter-spacing: .2px; }
+
+/* Scroll reveal (classes added by home.js; nothing is hidden without JS) */
+.kmh-reveal { opacity: 0; transform: translateY(24px); transition: opacity .8s var(--kmh-ease), transform .8s var(--kmh-ease); }
+.kmh-reveal.is-visible { opacity: 1; transform: none; }
+
+/* Small laptops / landscape tablets */
+@media (min-width: 992px) and (max-width: 1279px) {
+    :root { --kmh-rail: 170px; --kmh-gutter: 7vw; }
+    .kmh-about-row { grid-template-columns: 1fr; gap: 10px; max-width: 760px; }
+    .kmh-menu a { font-size: 18px; }
+}
+
+/* ==========================================================================
+   Tablet / mobile: menu becomes a top bar with a toggle
+   ========================================================================== */
+@media (max-width: 991px) {
+    :root { --kmh-rail: 0px; --kmh-gutter: 16px; }
+    body.kmh-home { font-size: 16px; }
+
+    .kmh-logo { top: 8px; left: 10px; width: 140px; padding: 0; background: transparent; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; border-radius: 0; }
+    .kmh-rail {
+        top: 0; left: 0; right: 0; bottom: auto; width: auto; height: auto;
+        padding: 0; background: transparent; display: block;
+    }
+    .kmh-menu-toggle {
+        display: flex; align-items: center; justify-content: center;
+        position: fixed; top: 8px; right: 10px; z-index: 45;
+        width: 44px; height: 44px; padding: 0; border: 0; background: #fff; cursor: pointer;
+    }
+    .kmh-menu-toggle span,
+    .kmh-menu-toggle span::before,
+    .kmh-menu-toggle span::after {
+        display: block; width: 26px; height: 3px; background: #111; position: relative; content: "";
+        transition: transform .25s ease, background .25s ease;
+    }
+    .kmh-menu-toggle span::before { position: absolute; top: -8px; }
+    .kmh-menu-toggle span::after { position: absolute; top: 8px; }
+    body.menu-open .kmh-menu-toggle span { background: transparent; }
+    body.menu-open .kmh-menu-toggle span::before { transform: translateY(8px) rotate(45deg); }
+    body.menu-open .kmh-menu-toggle span::after { transform: translateY(-8px) rotate(-45deg); }
+
+    /* white bar behind logo + toggle */
+    .kmh-rail::before {
+        content: ""; position: fixed; top: 0; left: 0; right: 0; height: 60px; background: #fff;
+        box-shadow: 0 1px 6px rgba(0, 0, 0, .08);
+    }
+    .kmh-rail-panel {
+        position: fixed; top: 60px; left: 0; right: 0;
+        padding: 18px 16px 24px; background: #fff; box-shadow: 0 8px 16px rgba(0, 0, 0, .12);
+        display: none;
+    }
+    body.menu-open .kmh-rail-panel { display: block; }
+    .kmh-menu li + li { margin-top: 14px; }
+    .kmh-menu a { font-size: 18px; }
+    .kmh-contact-icons { margin-top: 22px; display: flex; justify-content: flex-end; gap: 14px; }
+    .kmh-contact-icons li + li { margin-top: 0; }
+
+    .kmh-section { min-height: 0; padding: 80px 16px 50px; }
+    .kmh-intro { height: 56vw; min-height: 0; margin-top: 60px; padding: 0; }
+    .kmh-scroll-cue { bottom: 14px; }
+    .kmh-scroll-arrows { display: none; }
+    .kmh-scroll-mouse { width: 22px; height: 36px; border-radius: 12px; }
+    .kmh-scroll-label { display: none; }
+    .kmh-title { font-size: 26px; }
+    .kmh-lead { font-size: 17px; }
+
+    .kmh-about-row { grid-template-columns: 1fr; gap: 10px; }
+
+    .kmh-slider { padding: 0 36px; margin-left: 0 !important; }
+    .kmh-chevron { width: 34px; height: 34px; margin-top: -17px; }
+    .kmh-chevron svg { width: 9px; height: 16px; }
+    .kmh-chevron.prev { left: 0; }
+    .kmh-chevron.next { right: 0; }
+
+    .kmh-project-page { grid-template-columns: 1fr 1fr; grid-template-rows: repeat(3, 180px); height: auto; gap: 14px; }
+    .kmh-project-page > :nth-child(1) { grid-column: 1 / span 2; grid-row: 1; }
+    .kmh-project-page > :nth-child(2) { grid-column: 1; grid-row: 2; }
+    .kmh-project-page > :nth-child(3) { grid-column: 2; grid-row: 2; }
+    .kmh-project-page > :nth-child(4) { grid-column: 1 / span 2; grid-row: 3; }
+    .kmh-project-name { font-size: 15px; padding: 26px 10px 8px; }
+    .kmh-projects .kmh-know-more { margin-left: 0; padding-right: 36px; }
+
+    /* timeline turns into a vertical list */
+    .kmh-timeline-years, .kmh-timeline-axis { display: none; }
+    .kmh-timeline-items { grid-template-columns: 1fr 1fr; gap: 14px; }
+    .kmh-timeline-item { padding-top: 0; }
+    .kmh-timeline-item::before { display: none; }
+    .kmh-timeline-box { aspect-ratio: auto; min-height: 110px; flex-direction: column; }
+    .kmh-timeline-box[data-year]::before { content: attr(data-year); font-weight: 700; font-size: 20px; }
+
+    .kmh-deliveries { padding-bottom: 20px; }
+    .kmh-clients { padding-top: 30px; }
+    .kmh-clients-intro { margin-bottom: 34px; }
+    .kmh-client-logos { gap: 16px; justify-content: center; }
+    .kmh-client-logos img { width: 46% !important; max-width: 200px; height: 96px; padding: 16px 18px; }
+    .kmh-client-logos .logo-meenakshi { padding: 22px 14px; }
+    .kmh-client-logos .logo-emerald { padding: 10px; }
+
+    .kmh-footer { margin-right: 0; padding: 22px 16px; }
+}
+
+@media (max-width: 991px) {
+    body.at-intro .kmh-logo, body.at-intro .kmh-rail { opacity: 1; pointer-events: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .kmh-project-track, .kmh-project img, .kmh-project-name, .kmh-project, .kmh-timeline-box, .kmh-client-logos img { transition: none; }
+    .kmh-reveal { opacity: 1; transform: none; transition: none; }
+    .kmh-scroll-wheel, .kmh-scroll-arrows i { animation: none; opacity: 1; }
+    .kmh-scroll-cue { animation: none; opacity: 1; transform: translate(-50%, 0); }
+}
